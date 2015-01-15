@@ -1,3 +1,16 @@
 <h1>ALL THE CATS</h1>
-<pre><%= @cats.to_s %></pre>
-<a href="/cats/new">New cat!</a>
+
+<% if flash["notice"] %>
+  <div class="notice"><%= flash["notice"] %></div>
+<% end %>
+
+<% if @cats %>
+<ul>
+  <% @cats.each do |cat| %>
+    <li><%= link_to cat.name, cat_url(cat.id) %></li>
+  <% end %>
+</ul>
+<% end %>
+
+
+<%= link_to "New Cat!", new_cat_url %>
