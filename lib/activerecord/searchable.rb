@@ -1,9 +1,7 @@
-require_relative 'db_connection'
-require_relative '01_sql_object'
+require_relative '../db_connection'
 
 module Searchable
   def where(params)
-
     attr_names = params.keys.map do |attr_name|
       "#{attr_name} = ?"
     end.join(' AND ')
@@ -19,8 +17,4 @@ module Searchable
 
     results.map { |result| new(result) }
   end
-end
-
-class SQLObject
-    extend Searchable
 end

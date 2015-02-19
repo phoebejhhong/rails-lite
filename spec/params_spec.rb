@@ -1,6 +1,6 @@
 require 'webrick'
-require 'params'
-require 'controller_base'
+require_relative '../lib/actionpack/params'
+require_relative '../lib/actionpack/controller_base'
 
 describe Params do
   before(:all) do

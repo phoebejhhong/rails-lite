@@ -1,5 +1,5 @@
 require 'webrick'
-require 'controller_base'
+require_relative '../lib/actionpack/controller_base'
 
 describe ControllerBase do
   before(:all) do

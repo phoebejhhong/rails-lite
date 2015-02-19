@@ -1,9 +1,12 @@
-require_relative 'db_connection'
+require_relative 'searchable'
+require_relative 'associatable'
+require_relative '../db_connection'
 require 'active_support/inflector'
-# NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
-# of this project. It was only a warm up.
 
 class SQLObject
+  extend Associatable
+  extend Searchable
+
   def self.columns
     DBConnection.execute2(<<-SQL).first.map(&:to_sym)
       SELECT
@@ -88,7 +91,7 @@ class SQLObject
   end
 
   def attributes
-    # ...
+
   end
 
   def attribute_values
@@ -123,6 +126,6 @@ class SQLObject
   end
 
   def save
-    id.nil? ? insert : update 
+    id.nil? ? insert : update
   end
 end

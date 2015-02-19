@@ -1,6 +1,6 @@
 require 'webrick'
-require 'session'
-require 'controller_base'
+require_relative '../lib/actionpack/session'
+require_relative '../lib/actionpack/controller_base'
 
 describe Session do
   let(:req) { WEBrick::HTTPRequest.new(Logger: nil) }

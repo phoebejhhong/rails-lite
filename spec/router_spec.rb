@@ -1,6 +1,6 @@
 require 'webrick'
-require 'router'
-require 'controller_base'
+require_relative '../lib/actionpack/router'
+require_relative '../lib/actionpack/controller_base'
 
 describe Route do
   let(:req) { WEBrick::HTTPRequest.new(Logger: nil) }

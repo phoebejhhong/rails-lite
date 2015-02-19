@@ -1,13 +1,8 @@
-require_relative '02_searchable'
+require_relative 'searchable'
 require 'active_support/inflector'
 
-# Phase IIIa
 class AssocOptions
-  attr_accessor(
-    :foreign_key,
-    :class_name,
-    :primary_key
-  )
+  attr_accessor :foreign_key, :class_name, :primary_key
 
   def model_class
     class_name.constantize
@@ -35,7 +30,6 @@ class HasManyOptions < AssocOptions
 end
 
 module Associatable
-  # Phase IIIb
   def belongs_to(name, options = {})
     self.assoc_options[name] = BelongsToOptions.new(name, options)
 
@@ -60,9 +54,28 @@ module Associatable
   def assoc_options
     @assoc_options ||= {}
   end
-end
 
-class SQLObject
-  # Mixin Associatable here...
-  extend Associatable
+  def has_one_through(name, through_name, source_name)
+    through_options = self.assoc_options[through_name]
+
+    define_method(name) do
+      source_options =
+      through_options.model_class.assoc_options[source_name]
+
+      results = DBConnection.execute(<<-SQL)
+      SELECT
+      #{source_options.table_name}.*
+      FROM
+      #{through_options.table_name}
+      JOIN
+      #{source_options.table_name}
+      ON #{source_options.table_name}.#{source_options.primary_key} = #{through_options.table_name}.#{source_options.foreign_key}
+      WHERE
+      #{through_options.table_name}.#{source_options.primary_key}
+      = #{self.send(through_options.foreign_key)}
+      SQL
+
+      results.map { |result| source_options.model_class.new(result) }.first
+    end
+  end
 end

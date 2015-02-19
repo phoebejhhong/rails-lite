@@ -1,6 +1,6 @@
 require 'webrick'
-require 'controller_base'
-require 'router'
+require_relative '../lib/actionpack/controller_base'
+require_relative '../lib/actionpack/router'
 
 describe "the symphony of things" do
   let(:req) { WEBrick::HTTPRequest.new(Logger: nil) }
